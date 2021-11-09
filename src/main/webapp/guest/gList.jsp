@@ -9,6 +9,8 @@
   GuestDAO dao = new GuestDAO();
   List<GuestVO> vos = dao.gList();
   GuestVO vo = new GuestVO();
+  
+  int no = vos.size();		// 총 건수
 %>
 <!DOCTYPE html>
 <html>
@@ -68,7 +70,7 @@
 	  <table class="table table-borderless">
 	    <tr>
 	      <td>
-	        방문번호 : <%=vo.getIdx() %> &nbsp;
+	        방문번호 : <%=no %> &nbsp;
 <%
 					if(mid.equals("admin")) {
 					  out.println("<a href='javascript:delCheck("+vo.getIdx()+")' class='btn btn-secondary btn-sm'>삭제</a>");
@@ -110,7 +112,10 @@
 	    </tr>
 	  </table>
 	  <br/>
-<%} %>
+<%
+	no--;
+	} 
+%>
 </div>
 <br>
 <%@ include file="../include/footer.jsp" %>
