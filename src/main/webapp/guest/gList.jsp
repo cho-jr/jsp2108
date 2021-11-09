@@ -30,7 +30,7 @@
 /* 이 곳까지 페이징 처리 변수 지정 끝 */
 
 	/* 블록페이징 처리(블록의 크기를 이용하여 ' 현재 페이지의 블록 위치(curBlock)', '마지막 블럭의 위치(lastBlock)') */
-	int blockSize = 3;		// 한 블록의 크기를 3개의 Page로 본다. (사용자 지정)
+	int blockSize = 5;		// 한 블록의 크기를 3개의 Page로 본다. (사용자 지정)
 	int curBlock = (pag - 1) / blockSize;
 	int lastBlock = (totPage % blockSize)== 0 ? (totPage / blockSize) - 1: (totPage / blockSize);
 		
@@ -168,10 +168,11 @@
 <!-- 블록 페이징 처리 시작 -->
 <div style="text-align: center;">
 <%  if(pag != 1) {%>
-		[<a href="gList.jsp?pag=1">첫 페이지</a>]&nbsp;		
+		<a href="gList.jsp?pag=1">첫 페이지</a>&nbsp;		
 <%	}%>
 <%  if(curBlock > 0) {%>
-		<a href="gList.jsp?pag=<%=(curBlock - 1) * blockSize + 1 %>" style="color:gray; font-size: 16pt;">&lt;&lt;</a>&nbsp;			
+<!-- 		<a href="gList.jsp?pag=<%=(curBlock - 1) * blockSize + 1 %>" style="color:gray; font-size: 16pt;">&lt;&lt;</a>&nbsp;  -->			
+		<a href="gList.jsp?pag=<%=curBlock * blockSize  %>" style="color:gray; font-size: 16pt;">&lt;&lt;</a>&nbsp;			
 <%	}%>
 <%
 	out.print("&nbsp;&nbsp;&nbsp;");
@@ -191,7 +192,7 @@
 		&nbsp;<a href="gList.jsp?pag=<%=(curBlock + 1) * blockSize + 1 %>" style="color:gray; font-size: 16pt;">&gt;&gt;</a>			
 <%	}%>
 <%  if(pag != totPage) {%>
-		&nbsp;[<a href="gList.jsp?pag=<%=totPage%>">마지막 페이지</a>]			
+		&nbsp;<a href="gList.jsp?pag=<%=totPage%>">마지막 페이지</a>			
 <%	}%>
 
 </div>
