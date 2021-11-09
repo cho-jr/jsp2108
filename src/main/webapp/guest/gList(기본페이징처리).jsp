@@ -21,7 +21,7 @@
 /* 이 곳부터 페이징 처리 변수 지정 시작 */
 	int pag = request.getParameter("pag")==null ? 1: Integer.parseInt(request.getParameter("pag"));
 
-	int pageSize = 2;					// 1. 한 페이지 분량
+	int pageSize = 5;					// 1. 한 페이지 분량
 	int totRecCnt = dao.totRecCnt();		// 2. 총 레코드 건수
 	int totPage = (totRecCnt % pageSize)==0? totRecCnt/pageSize: totRecCnt/pageSize + 1;	//3. 총 페이지 수
   	int startIndexNo = (pag - 1) * pageSize; 	// 4. 현재 페이지의 시작 index 번호
@@ -29,19 +29,13 @@
   	
 /* 이 곳까지 페이징 처리 변수 지정 끝 */
 
-	/* 블록페이징 처리(블록의 크기를 이용하여 ' 현재 페이지의 블록 위치(curBlock)', '마지막 블럭의 위치(lastBlock)') */
-	int blockSize = 3;		// 한 블록의 크기를 3개의 Page로 본다. (사용자 지정)
-	int curBlock = (pag - 1) / blockSize;
-	int lastBlock = (totPage % blockSize)== 0 ? (totPage / blockSize) - 1: (totPage / blockSize);
-		
-	/* 블록페이징 처리 끝 */
 	List<GuestVO> vos = dao.gList(startIndexNo, pageSize);
 %>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>gList.jsp(페이징_블럭 페이지 처리)</title>
+  <title>gList.jsp(기본 페이지 처리_이전/다음)</title>
   <%@ include file="../include/bs4.jsp" %>
   <script>
     function delCheck(idx) {
@@ -165,37 +159,24 @@
 %>
 </div>
 
-<!-- 블록 페이징 처리 시작 -->
+<!-- 페이징 처리 시작 -->
 <div style="text-align: center;">
 <%  if(pag != 1) {%>
-		[<a href="gList.jsp?pag=1">첫 페이지</a>]&nbsp;		
+		<a href="gList.jsp?pag=1">첫 페이지</a>			
 <%	}%>
-<%  if(curBlock > 0) {%>
-		<a href="gList.jsp?pag=<%=(curBlock - 1) * blockSize + 1 %>" style="color:gray; font-size: 16pt;">&lt;&lt;</a>&nbsp;			
+<%  if(pag > 1) {%>
+		<a href="gList.jsp?pag=<%=pag - 1%>" style="color:gray; font-size: 16pt;">&lt;&lt;&lt;</a>			
 <%	}%>
-<%
-	out.print("&nbsp;&nbsp;&nbsp;");
-	for(int i = (curBlock * blockSize) + 1; i <= (curBlock+1) * blockSize; i++ ) {
-		if(i>totPage) break;
-		if(pag == i) {
-			out.println("<a href='gList.jsp?pag="+i+"' style='border:1px solid gray; color:black; padding:0 3px 0 3px;'>"+i+"</a>");			
-		} else {
-			out.println("<a href='gList.jsp?pag="+i+"' style='color:gray;'>"+i+"</a>");		
-		}
-	out.print("&nbsp;");
-	}
-	out.print("&nbsp;&nbsp;&nbsp;");
-%>	
-	
-<%  if(curBlock < lastBlock) {%>
-		&nbsp;<a href="gList.jsp?pag=<%=(curBlock + 1) * blockSize + 1 %>" style="color:gray; font-size: 16pt;">&gt;&gt;</a>			
+	<span style="font-weight: 600;"><%=pag %> Page / <%=totPage%> Pages</span>
+<%  if(pag < totPage) {%>
+		<a href="gList.jsp?pag=<%=pag + 1%>" style="color:gray; font-size: 16pt;">&gt;&gt;&gt;</a>			
 <%	}%>
 <%  if(pag != totPage) {%>
-		&nbsp;[<a href="gList.jsp?pag=<%=totPage%>">마지막 페이지</a>]			
+		<a href="gList.jsp?pag=<%=totPage%>">마지막 페이지</a>			
 <%	}%>
 
 </div>
-<!-- 블록 페이징 처리 끝 -->
+<!-- 페이징 처리 끝 -->
 <br/>
 <%@ include file="../include/footer.jsp" %>
 </body>
