@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>jsp2108(재령이 JSP 프로젝트 --> https://github.com/cho-jr/jsp2108)</title>
+    <title>jsp2108(재령이 JSP 프로젝트 수정(211109_10:19) --> https://github.com/cho-jr/jsp2108)</title>
 	<%@ include file="./include/bs4.jsp" %>
 	<style>
 	.fakeimg {
