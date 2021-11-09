@@ -5,8 +5,8 @@ create table guest (
 	email varchar(60),								/* 이메일 주소 */
 	homepage varchar(60),							/* 홈페이지(블로그)주소 */
 	vDate datetime default now(),			/* 방문일자 */
-	hostIp varchar(50) not null,			/* 방문자 IP */
-  	content  text not null						/* 방문소감 */
+  hostIp varchar(50) not null,			/* 방문자 IP */
+  content  text not null						/* 방문소감 */
 );
 
 desc guest;

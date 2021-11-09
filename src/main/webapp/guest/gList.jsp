@@ -4,6 +4,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
+	String mid = session.getAttribute("sAdmin")==null ? "" : (String) session.getAttribute("sAdmin");
+
   GuestDAO dao = new GuestDAO();
   List<GuestVO> vos = dao.gList();
   GuestVO vo = new GuestVO();
@@ -12,8 +14,14 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>gList.jsp(방명록리스트_수정함)</title>
+  <title>gList.jsp(방명록리스트_수정함3)</title>
   <%@ include file="../include/bs4.jsp" %>
+  <script>
+    function delCheck(idx) {
+    	var ans = confirm("현재 방문소감 글을 삭제하시겠습니까?");
+    	if(ans) location.href="<%=request.getContextPath()%>/GDelete?idx="+idx;
+    }
+  </script>
   <style>
     th {
     	background-color: #ccc;
@@ -31,7 +39,16 @@
       <td colspan="2" style="text-align:center;"><h2>방 명 록 리 스 트</h2></td>
     </tr>
     <tr>
-      <td><a href="<%=request.getContextPath()%>/" class="btn btn-secondary">관리자</a></td>
+      <td>
+<%
+        if(mid.equals("admin")) {
+          out.println("<a href='"+request.getContextPath()+"/AdminLogOut' class='btn btn-secondary'>관리자 로그아웃</a>");
+        }
+        else {
+        	out.println("<a href='adminLogin.jsp' class='btn btn-secondary'>관리자</a>");
+        }
+%>
+      </td>
       <td style="text-align:right;"><a href="<%=request.getContextPath()%>/guest/gInput.jsp" class="btn btn-secondary">글쓰기</a></td>
     </tr>
   </table>
@@ -44,12 +61,19 @@
 		String homepage = vo.getHomepage();
 		// if(homepage.equals("") || homepage == null) homepage = "-없음-";
 		
+		String vDate = vo.getvDate().substring(0, vo.getvDate().length()-2);
+		
 		String content = vo.getContent().replace("\n", "<br/>");
 %>
 	  <table class="table table-borderless">
 	    <tr>
 	      <td>
-	        방문번호 : <%=vo.getIdx() %>
+	        방문번호 : <%=vo.getIdx() %> &nbsp;
+<%
+					if(mid.equals("admin")) {
+					  out.println("<a href='javascript:delCheck("+vo.getIdx()+")' class='btn btn-secondary btn-sm'>삭제</a>");
+					}
+%>
 	      </td>
 	      <td style="text-align:right;">
 	        방문IP : <%=vo.getHostIp() %>
@@ -58,10 +82,10 @@
 	  </table>
 	  <table class="table table-bordered">
 	    <tr>
-	      <th>성명</th>
-	      <td><%=vo.getName() %></td>
-	      <th>방문일자</th>
-	      <td><%=vo.getvDate() %></td>
+	      <th style="width:20%;">성명</th>
+	      <td style="width:25%;"><%=vo.getName() %></td>
+	      <th style="width:20%;">방문일자</th>
+	      <td style="width:35%;"><%=vDate %></td>
 	    </tr>
 	    <tr>
 	      <th>전자우편</th>
@@ -78,7 +102,6 @@
 						out.println("<a href='"+homepage+"' target='_blank'>"+homepage+"</a>");
 					}
 %>
-	        
 	      </td>
 	    </tr>
 	    <tr>

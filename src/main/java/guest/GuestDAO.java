@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuestDAO {
-	private Connection conn;
-	private PreparedStatement pstmt;
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 	
 	private String sql = "";
@@ -21,18 +21,19 @@ public class GuestDAO {
 	private String user = "root";
 	private String password = "1234";
 	
+	// 객체 생성시 DB연동하기
 	public GuestDAO() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 검색 실패");
+			System.out.println("드라이버 검색실패~~");
 		} catch (SQLException e) {
-			System.out.println("데이터베이스 연동 실패");
-			e.printStackTrace();
+			System.out.println("데이터베이스 연동실패~~~");
 		}
 	}
 	
+	// 객체 소멸시키기
 	public void pstmtClose() {
 		if(pstmt != null) {
 			try {
@@ -67,21 +68,23 @@ public class GuestDAO {
 				vo.setvDate(rs.getString("vDate"));
 				vo.setHostIp(rs.getString("hostIp"));
 				vo.setContent(rs.getString("content"));
+				
 				vos.add(vo);
 			}
 		} catch (SQLException e) {
 			System.out.println("SQL 오류 : " + e.getMessage());
 		} finally {
 			rsClose();
-		} 
+		}
 		
 		return vos;
 	}
 
-	// 방명록 등록
+	// 방명록에 방문소감 등록하기
 	public boolean gInputOk(GuestVO vo) {
+		boolean res = false;
 		try {
-			sql = "insert into guest values(default, ?, ?, ?, default, ?, ?);";
+			sql = "insert into guest values (default,?,?,?,default,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getEmail());
@@ -89,12 +92,29 @@ public class GuestDAO {
 			pstmt.setString(4, vo.getHostIp());
 			pstmt.setString(5, vo.getContent());
 			pstmt.executeUpdate();
-			return true;
+			res = true;
 		} catch (SQLException e) {
 			System.out.println("SQL 오류 : " + e.getMessage());
 		} finally {
 			pstmtClose();
-		} 
-		return false;
+		}
+		return res;
+	}
+
+	// 방명록 삭제
+	public boolean gDelete(int idx) {
+		boolean res = false;
+		try {
+			sql = "delete from guest where idx = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			pstmt.executeUpdate();
+			res = true;
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : " + e.getMessage());
+		} finally {
+			pstmtClose();
+		}
+		return res;
 	}
 }
