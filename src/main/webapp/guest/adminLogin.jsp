@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>adminLogin.jsp(관리자 인증차)</title>
+  <title>adminLogin.jsp(관리자 인증창)</title>
   <%@ include file="../include/bs4.jsp" %>
   <style>
     table {
@@ -28,7 +28,7 @@
 <div class="container">
   <h2>관리자 인증창</h2>
   <br/>
-  <form name="myfrom" method="post" action="adminLoingOk.jsp">
+  <form name="myfrom" method="post" action="adminLoginOk.jsp">
 	  <table class="table">
 	    <tr>
 	      <th>관리자아이디</th>

@@ -23,7 +23,7 @@
 
 	int pageSize = 5;					// 1. 한 페이지 분량
 	int totRecCnt = dao.totRecCnt();		// 2. 총 레코드 건수
-	int totPage = (totRecCnt % pageSize)==0? totRecCnt/pageSize: totRecCnt/pageSize + 1;	//3. 총 페이지 수
+	int totPage = (int) Math.ceil(totRecCnt/pageSize);	//3. 총 페이지 수
   	int startIndexNo = (pag - 1) * pageSize; 	// 4. 현재 페이지의 시작 index 번호
 	int curScrStartNo = totRecCnt - startIndexNo; // 5. 현재 화면에 보이는 방문 소감 시작 번호
   	
