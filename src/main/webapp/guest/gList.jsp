@@ -6,8 +6,8 @@
 <%
 	String mid = session.getAttribute("sAdmin")==null ? "" : (String) session.getAttribute("sAdmin");
 
-  GuestDAO dao = new GuestDAO();
-  GuestVO vo = new GuestVO();
+	GuestDAO dao = new GuestDAO();
+	GuestVO vo = new GuestVO();
   
 /* 
 	페이징 처리
