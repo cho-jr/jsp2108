@@ -55,7 +55,7 @@ public class GuestDAO {
 	public List<GuestVO> gList(int startIndexNo, int pageSize) {
 		List<GuestVO> vos = new ArrayList<GuestVO>();
 		try {
-			sql = "select * from guest order by idx desc limit ?, ?";
+			sql = "select * from guest order by idx desc limit ?,?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, startIndexNo);
 			pstmt.setInt(2, pageSize);
@@ -103,7 +103,7 @@ public class GuestDAO {
 		return res;
 	}
 
-	// 방명록 삭제
+	// 방문소감 삭제처리
 	public boolean gDelete(int idx) {
 		boolean res = false;
 		try {
@@ -119,26 +119,22 @@ public class GuestDAO {
 		}
 		return res;
 	}
+	
 	// 전체 레코드 건수
 	public int totRecCnt() {
 		int totRecCnt = 0;
 		try {
-//			sql = "select count(*) as cnt from guest;";
-			sql = "select count(*) from guest;";
+			// sql = "select count(*) as cnt from guest";
+			sql = "select count(*) from guest";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
-			
-			if(rs.next()) {
-				totRecCnt = rs.getInt(1);
-	
-			}
+			if(rs.next()) totRecCnt = rs.getInt(1);
 		} catch (SQLException e) {
 			System.out.println("SQL 오류 : " + e.getMessage());
 		} finally {
 			rsClose();
 		}
-		
 		return totRecCnt;
 	}
 }

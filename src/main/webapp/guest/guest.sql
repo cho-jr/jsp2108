@@ -17,6 +17,10 @@ insert into guest values (default,'홍길동','hkd1234@hanmail.net','',default,'
 
 select * from guest;
 
-select count(*) from guest;	/* 데이터 총 개수 */
+select count(*) from guest;
 
+select * from guest order by idx desc limit 0,10;
+select * from guest order by idx desc limit 10,10;
 select * from guest order by idx desc limit 20,10;
+
+
