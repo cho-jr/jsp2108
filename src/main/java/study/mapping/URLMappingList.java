@@ -1,7 +1,6 @@
 package study.mapping;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -19,10 +18,11 @@ public class URLMappingList extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserDAO dao = new UserDAO();
-		List<UserVO> vos = new ArrayList<UserVO>();
-		vos = dao.getUserList();
+		
+		List<UserVO> vos = dao.getUserList();
 		
 		request.setAttribute("vos", vos);
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("\\WEB-INF\\study\\mapping\\urlMappingList.jsp");
 		dispatcher.forward(request, response);
 	}

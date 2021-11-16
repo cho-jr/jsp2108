@@ -17,24 +17,48 @@ public class MemberController extends HttpServlet {
 		String viewPage = "/WEB-INF/member";
 		
 		String uri = request.getRequestURI();
-		String com = uri.substring(uri.lastIndexOf("/"), uri.lastIndexOf("."));	// 마지막 /와 . 사이를 잘라냄
+		String com = uri.substring(uri.lastIndexOf("/"), uri.lastIndexOf("."));
 		
 		if(com.equals("/memLogin")) {
+			command = new MemLoginCommand();  // 로그인시 저장된 아이디가 있는지를 쿠키로 처리하기위해 커맨드객체생성처리
+			command.execute(request, response);
 			viewPage += "/memLogin.jsp";
-		} else if(com.equals("/memJoin")) {
+		}
+		else if(com.equals("/memLoginOk")) {
+			command = new MemLoginOkCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
+		else if(com.equals("/memLogOut")) {
+			command = new MemLogOutCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
+		else if(com.equals("/memJoin")) {
 			viewPage += "/memJoin.jsp";
-		} else if(com.equals("/idCheck")) {
+		}
+		else if(com.equals("/memJoinOk")) {
+			command = new MemJoinOkCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
+		else if(com.equals("/idCheck")) {
 			command = new IdCheckCommand();
 			command.execute(request, response);
 			viewPage += "/idCheck.jsp";
-		} else if(com.equals("/nickCheck")) {
+		}
+		else if(com.equals("/nickCheck")) {
 			command = new NickCheckCommand();
 			command.execute(request, response);
 			viewPage += "/nickCheck.jsp";
 		}
+		else if(com.equals("/memMain")) {
+			command = new MemMainCommand();
+			command.execute(request, response);
+			viewPage += "/memMain.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
-		
 	}
 }

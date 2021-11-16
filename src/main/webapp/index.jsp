@@ -11,7 +11,6 @@
     background: #aaa;
   }
   </style>
-  
 </head>
 <body>
 	<%@ include file="include/header.jsp" %>

@@ -17,10 +17,9 @@
   	else if(msg == "userDeleteNo") msg = "정보가 삭제되지 않았습니다.";
   	else if(msg == "userInputOk") msg = "정보가 입력되었습니다.";
   	else if(msg == "userInputNo") msg = "정보가 입력되지 않았습니다.";
-  	else if(msg == "userUpdateOk") msg = "정보가 수정되었습니다.";
-  	else if(msg == "userUpdateNo") msg = "정보가 수정되지 않았습니다.";
+  	else if(msg == "userUpdateOk") msg = "정보가 수정되었습니다.^.^.";
+  	else if(msg == "userUpdateNo") msg = "정보가 수정되지 않았습니다.ㅜㅜ.";
   	
-  
     alert(msg);
     if(url != "") location.href = url;
   </script>

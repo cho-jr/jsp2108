@@ -21,9 +21,9 @@ public class GetConn {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 검색 실패");
+			System.out.println("드라이버 검색 실패~~");
 		} catch (SQLException e) {
-			System.out.println("Database 연동 실패");
+			System.out.println("Database 연동실패~~");
 		}
 	}
 	
@@ -32,6 +32,7 @@ public class GetConn {
 	public static GetConn getInstance() {
 		return instance;
 	}
+	
 	public Connection getConn() {
 		return conn;
 	}
@@ -41,20 +42,15 @@ public class GetConn {
 			try {
 				rs.close();
 				pstmtClose();
-			} catch (SQLException e) {}
+			} catch (Exception e) {}
 		}
 	}
-	private void pstmtClose() {
+
+	public void pstmtClose() {
 		if(pstmt != null) {
 			try {
 				pstmt.close();
-			} catch (SQLException e) {}
+			} catch (Exception e) {}
 		}
 	}
-	
 }
-
-
-
-
-
