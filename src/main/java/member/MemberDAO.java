@@ -230,7 +230,7 @@ public class MemberDAO {
 		}
 	}
 
-	// 신규 회원 (준회원)의 갯수 가져오기
+	// 신규회원(준회원)의 갯수 가져오기
 	public int getNewMember() {
 		int newMember = 0;
 		try {
@@ -238,24 +238,41 @@ public class MemberDAO {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			rs.next();
-			
 			newMember = rs.getInt(1);
 		} catch (SQLException e) {
 			System.out.println("SQL 오류 : " + e.getMessage());
 		} finally {
 			getConn.rsClose();
 		}
+		
 		return newMember;
 	}
 
-	// 회원 전체 리스트
-	public ArrayList<MemberVO> getMemberList() {
+	// 회원 전체 리스트 가저오기
+	public ArrayList<MemberVO> getMemberList(int startIndexNo, int pageSize, int level, String mid) {
 		ArrayList<MemberVO> vos = new ArrayList<MemberVO>();
 		try {
-			sql = "select * from member order by idx desc";
-			pstmt = conn.prepareStatement(sql);
+			if(level == 99) {
+				if(!mid.equals("")) {
+					sql = "select * from member where mid like ? order by idx desc limit ?, ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, "%" + mid + "%");
+					pstmt.setInt(2, startIndexNo);
+					pstmt.setInt(3, pageSize);
+				} else {
+					sql = "select * from member order by idx desc limit ?, ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, startIndexNo);
+					pstmt.setInt(2, pageSize);
+				}
+			} else {
+				sql = "select * from member where level = ? order by idx desc limit ?, ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, level);
+				pstmt.setInt(2, startIndexNo);
+				pstmt.setInt(3, pageSize);
+			}
 			rs = pstmt.executeQuery();
-			
 			while(rs.next()) {
 				vo = new MemberVO();
 				vo.setIdx(rs.getInt("idx"));
@@ -285,14 +302,97 @@ public class MemberDAO {
 				
 				vos.add(vo);
 			}
-			
 		} catch (SQLException e) {
 			System.out.println("SQL 오류 : " + e.getMessage());
 		} finally {
 			getConn.rsClose();
 		}
-		
 		return vos;
 	}
-			
+
+	// 개별정보 상세보기처리
+	public MemberVO getMemberInfor(int idx) {
+		vo = new MemberVO();
+		try {
+			sql = "select * from member where idx = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setPwdKey(rs.getInt("pwdKey"));
+				vo.setNickName(rs.getString("nickName"));
+				vo.setName(rs.getString("name"));
+				vo.setGender(rs.getString("gender"));
+				vo.setBirthday(rs.getString("birthday"));
+				vo.setTel(rs.getString("tel"));
+				vo.setAddress(rs.getString("address"));
+				vo.setEmail(rs.getString("email"));
+				vo.setHomePage(rs.getString("homePage"));
+				vo.setJob(rs.getString("job"));
+				vo.setHobby(rs.getString("hobby"));
+				vo.setPhoto(rs.getString("photo"));
+				vo.setContent(rs.getString("content"));
+				vo.setUserInfor(rs.getString("userInfor"));
+				vo.setUserDel(rs.getString("userDel"));
+				vo.setPoint(rs.getInt("point"));
+				vo.setLevel(rs.getInt("level"));
+				vo.setVisitCnt(rs.getInt("visitCnt"));
+				vo.setLastDate(rs.getString("lastDate"));
+				vo.setStartDate(rs.getString("startDate"));
+				vo.setTodayCnt(rs.getInt("todayCnt"));
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return vo;
+	}
+
+	// 페이징처리를 위한 총 회원수 구하기
+	public int totRecCnt(int level, String mid) {
+		int totRecCnt = 0;
+		try {
+			String adsql = "";
+			if(level == 99 ) {
+				if(!mid.equals("")) {
+					adsql = " where mid like '%"+mid+"%'";
+				}
+				sql = "select count(*) from member" + adsql;
+				pstmt = conn.prepareStatement(sql);
+			} else {
+				if(!mid.equals("")) {
+					adsql = " and mid like '%"+mid+"%'";
+				}
+				sql = "select count(*) from member where level = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, level);
+			}
+			rs = pstmt.executeQuery();
+			rs.next();
+			totRecCnt = rs.getInt(1);
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return totRecCnt;
+	}
+	// 회원을 member 테이블에서 삭제 처리 한다. 
+	public void setMemberReset(int idx) {
+		try {
+			sql = "delete from member where idx = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : " + e.getMessage());
+		} finally {
+			getConn.pstmtClose();
+		}
+		
+	}
 }

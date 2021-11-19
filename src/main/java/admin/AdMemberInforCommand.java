@@ -7,14 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import member.MemberDAO;
+import member.MemberVO;
 
-public class AdContentCommand implements AdminInterface {
+public class AdMemberInforCommand implements AdminInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		MemberDAO memberDao = new MemberDAO();
-		int newMember = memberDao.getNewMember();
-		request.setAttribute("newMember", newMember);;
+		int idx = Integer.parseInt(request.getParameter("idx"));
+		
+		MemberDAO dao = new MemberDAO();
+		
+		MemberVO vo = dao.getMemberInfor(idx);
+		
+		request.setAttribute("vo", vo);
 	}
 
 }

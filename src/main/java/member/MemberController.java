@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import admin.AdMemberListCommand;
+
 @WebServlet("*.mem")
 public class MemberController extends HttpServlet {
 	@Override
@@ -72,6 +74,11 @@ public class MemberController extends HttpServlet {
 			command.execute(request, response);
 			viewPage = "/WEB-INF/message/message.jsp";
 		}
+//		else if(com.equals("/memList")) {
+//			command = new AdMemberListCommand();
+//			command.execute(request, response);
+//			viewPage += "/memList.jsp";
+//		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
