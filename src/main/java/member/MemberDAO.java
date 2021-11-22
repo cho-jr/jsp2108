@@ -252,23 +252,23 @@ public class MemberDAO {
 	public ArrayList<MemberVO> getMemberList(int startIndexNo, int pageSize, int level, String mid) {
 		ArrayList<MemberVO> vos = new ArrayList<MemberVO>();
 		try {
-			if(level == 99) {
-				if(!mid.equals("")) {
-					sql = "select * from member where mid like ? order by idx desc limit ?, ?";
-					pstmt = conn.prepareStatement(sql);
-					pstmt.setString(1, "%" + mid + "%");
-					pstmt.setInt(2, startIndexNo);
-					pstmt.setInt(3, pageSize);
-				} else {
-					sql = "select * from member order by idx desc limit ?, ?";
-					pstmt = conn.prepareStatement(sql);
-					pstmt.setInt(1, startIndexNo);
-					pstmt.setInt(2, pageSize);
-				}
-			} else {
+			if(level == 99 && mid.equals("")) {
+				sql = "select * from member order by idx desc limit ?, ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, startIndexNo);
+				pstmt.setInt(2, pageSize);
+			}
+			else if(level != 99 && mid.equals("")) {
 				sql = "select * from member where level = ? order by idx desc limit ?, ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, level);
+				pstmt.setInt(2, startIndexNo);
+				pstmt.setInt(3, pageSize);
+			}
+			else {
+				sql = "select * from member where mid like ? order by idx desc limit ?, ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+mid+"%");
 				pstmt.setInt(2, startIndexNo);
 				pstmt.setInt(3, pageSize);
 			}
@@ -356,20 +356,19 @@ public class MemberDAO {
 	public int totRecCnt(int level, String mid) {
 		int totRecCnt = 0;
 		try {
-			String adsql = "";
-			if(level == 99 ) {
-				if(!mid.equals("")) {
-					adsql = " where mid like '%"+mid+"%'";
-				}
-				sql = "select count(*) from member" + adsql;
+			if(level == 99 && mid.equals("")) {
+				sql = "select count(*) from member";
 				pstmt = conn.prepareStatement(sql);
-			} else {
-				if(!mid.equals("")) {
-					adsql = " and mid like '%"+mid+"%'";
-				}
+			}
+			else if(level != 99 && mid.equals("")) {
 				sql = "select count(*) from member where level = ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, level);
+			}
+			else {
+				sql = "select count(*) from member where mid like ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+mid+"%");
 			}
 			rs = pstmt.executeQuery();
 			rs.next();
@@ -381,7 +380,8 @@ public class MemberDAO {
 		}
 		return totRecCnt;
 	}
-	// 회원을 member 테이블에서 삭제 처리 한다. 
+
+	// 회원을 member테이블에서 삭제처리한다.
 	public void setMemberReset(int idx) {
 		try {
 			sql = "delete from member where idx = ?";
@@ -393,6 +393,5 @@ public class MemberDAO {
 		} finally {
 			getConn.pstmtClose();
 		}
-		
 	}
 }

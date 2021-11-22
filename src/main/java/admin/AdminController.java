@@ -23,10 +23,9 @@ public class AdminController extends HttpServlet {
 		HttpSession session = request.getSession();
 		String mid = (String) session.getAttribute("sMid");
 		int level = session.getAttribute("sLevel")==null ? 99 : (int) session.getAttribute("sLevel");
-		if(mid == null || level != 0) {
+		if(mid == null || level >= 4) {
 			viewPage = "/WEB-INF/member/memLogin.jsp";
 		}
-		
 		else if(com.equals("/adMenu")) {
 			viewPage += "/adMenu.jsp";
 		}
@@ -43,6 +42,11 @@ public class AdminController extends HttpServlet {
 			command.execute(request, response);
 			viewPage += "/member/adMemberList.jsp";
 		}
+		else if(com.equals("/memList")) {
+			command = new AdMemberListCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/member/memList.jsp";
+		}
 		else if(com.equals("/adMemberLevel")) {
 			command = new AdMemberLevelCommand();
 			command.execute(request, response);
@@ -53,12 +57,16 @@ public class AdminController extends HttpServlet {
 			command.execute(request, response);
 			viewPage += "/member/adMemberInfor.jsp";
 		}
-		else if(com.equals("/adMemberReset")) {
-				command = new AdMemberResetrCommand();
-				command.execute(request, response);
-				viewPage = "/WEB-INF/message/message.jsp";
+		else if(com.equals("/memInfor")) {
+			command = new AdMemberInforCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/member/memInfor.jsp";
 		}
-		
+		else if(com.equals("/adMemberReset")) {
+			command = new AdMemberResetCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
