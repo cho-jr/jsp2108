@@ -12,10 +12,10 @@ import study.mapping2.UserDAO;
 import study.mapping2.UserVO;
 
 @WebServlet("/userInput")
-public class UserInput extends HttpServlet{
+public class UserInput extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name")== null ? "" : request.getParameter("name");
+		String name = request.getParameter("name")==null ? "" : request.getParameter("name");
 		int age = Integer.parseInt(request.getParameter("age"));
 		
 		UserDAO dao = new UserDAO();
