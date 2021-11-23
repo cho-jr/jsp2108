@@ -18,11 +18,11 @@ public class BoGoodCommand implements BoardInterface {
 
 		BoardDAO dao = new BoardDAO();
 		
-		// 좋아요수 증가처리(중복방지)
-		// 세션배열(객체배열:ArrayList()) : 고유세션아이디 + 'good' + '현재글의 고유번호'
+		// 조회수 증가처리
+		// 세션 배열(객체 배열 : ArrayList()) : 고유 세션아이디 + 'good' + '현재 글의 고유번호'
 		HttpSession session = request.getSession();
-		ArrayList<String> goodIdx = (ArrayList) session.getAttribute("sGoodIdx");
-		if(goodIdx == null) {
+		ArrayList<String> goodIdx = (ArrayList<String>) session.getAttribute("sGoodIdx");
+		if(goodIdx == null ) {
 			goodIdx = new ArrayList<String>();
 			session.setAttribute("sGoodIdx", goodIdx);
 		}
