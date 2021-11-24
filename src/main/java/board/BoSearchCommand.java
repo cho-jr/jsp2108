@@ -7,22 +7,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BoListCommand implements BoardInterface {
+public class BoSearchCommand implements BoardInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String search = request.getParameter("search")==null ? "" : request.getParameter("search");
+		String searchString = request.getParameter("searchString")==null ? "" : request.getParameter("searchString");
+		
 		BoardDAO dao = new BoardDAO();
 		
 		/* 이곳부터 페이징 처리(블록페이지) 변수 지정 시작 */
 	  int pag = request.getParameter("pag")==null ? 1 : Integer.parseInt(request.getParameter("pag"));
 	  int pageSize = request.getParameter("pageSize")==null ? 5 : Integer.parseInt(request.getParameter("pageSize"));
-	  
-	  // 최근글 수정시 아래 두줄 삽입/수정
-	  int lately = request.getParameter("lately")==null ? 0 : Integer.parseInt(request.getParameter("lately"));
-	  int totRecCnt = 0;
-	  if(lately == 0) totRecCnt = dao.totRecCnt();		// 전체자료검색
-	  else totRecCnt = dao.totRecCntLately(lately);		// 지정된 최근자료검색
-	  
+	  int totRecCnt = dao.totRecCnt(search, searchString);		// 검색기에 입력된 전제 레코드수 구해오기
 	  int totPage = (totRecCnt % pageSize)==0 ? totRecCnt/pageSize : (totRecCnt/pageSize) + 1;
 	  int startIndexNo = (pag - 1) * pageSize;
 	  int curScrStrarNo = totRecCnt - startIndexNo;
@@ -31,10 +28,7 @@ public class BoListCommand implements BoardInterface {
 	  int lastBlock = (totPage % blockSize)==0 ? ((totPage / blockSize) - 1) : (totPage / blockSize);
 	  /* 블록페이징처리 끝 */
 		
-	  // 최근글수정시 아래 1줄 수정
-	  List<BoardVO> vos = null;
-	  if(lately == 0) vos = dao.getBoardList(startIndexNo, pageSize);  		// 전체자료검색
-	  else vos = dao.getBoardListLately(startIndexNo, pageSize, lately); 	// 지정된 최근자료검색
+	  List<BoardVO> vos = dao.getBoardSearch(search, searchString, startIndexNo, pageSize);
 		
 		request.setAttribute("vos", vos);
 		request.setAttribute("pag", pag);
@@ -45,8 +39,16 @@ public class BoListCommand implements BoardInterface {
 		request.setAttribute("lastBlock", lastBlock);
 		request.setAttribute("pageSize", pageSize);
 		
-		// 최근게시글에서 추가
-		request.setAttribute("lately", lately);
+		// 검색기에서 추가
+		String searchTitle = "";
+		if(search.equals("title")) searchTitle = "글제목";
+		else if(search.equals("nickName")) searchTitle = "글쓴이";
+		else searchTitle = "글내용";
+				
+		request.setAttribute("searchTitle", searchTitle);
+		request.setAttribute("search", search);
+		request.setAttribute("searchString", searchString);
+		request.setAttribute("searchCount", totRecCnt);
 	}
 
 }
