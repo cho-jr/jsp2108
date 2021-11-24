@@ -13,6 +13,17 @@
     	var pageSize = document.getElementById("pageSize").value;
     	location.href = "boList.bo?page=${pag}&pageSize="+pageSize;
     }
+    
+    // 최근게시글 검색
+    function latelyCheck() {
+    	var lately = document.getElementById("lately").value;
+    	if(lately == "") {
+    		alert("최신 검색일자를 선택하세요");
+    	}
+    	else {
+    		location.href="${ctp}/boList.bo?page=${pag}&pageSize=${pageSize}&lately="+lately;
+    	}
+    }
   </script>
   <style>
     th, td {
@@ -31,7 +42,13 @@
     </tr>
     <tr>
       <td class="text-left p-0">
-        <a href="${ctp}/boInput.bo" class="btn btn-secondary btn-sm">글쓰기</a>
+        <a href="${ctp}/boInput.bo" class="btn btn-secondary btn-sm">글쓰기</a> &nbsp;
+        <select name="lately" id="lately" onchange="latelyCheck()">
+          <option value="0">최근자료순</option>
+          <c:forEach var="i" begin="1" end="30">
+	          <option value="${i}" ${lately==i ? 'selected' : ''}>${i}일전</option>
+          </c:forEach>
+        </select>
       </td>
       <td class="text-right p-0">
         <select name="pageSize" id="pageSize" onchange="pageCheck()" class="p-0 m-0">
@@ -77,24 +94,24 @@
 		<c:if test="${totPage == 0}"><p style="text-align:center"><b>자료가 없습니다.</b></p></c:if>
 		<c:if test="${totPage != 0}">
 		  <c:if test="${pag != 1}">
-		    <li class="page-item"><a href="boList.bo?pag=1&pageSize=${pageSize}" title="첫페이지" class="page-link text-secondary">◁◁</a></li>
+		    <li class="page-item"><a href="boList.bo?pag=1&pageSize=${pageSize}&lately=${lately}" title="첫페이지" class="page-link text-secondary">◁◁</a></li>
 		  </c:if>
 		  <c:if test="${curBlock > 0}">
-		    <li class="page-item"><a href="boList.bo?pag=${(curBlock-1)*blockSize + 1}&pageSize=${pageSize}" title="이전블록" class="page-link text-secondary">◀</a></li>
+		    <li class="page-item"><a href="boList.bo?pag=${(curBlock-1)*blockSize + 1}&pageSize=${pageSize}&lately=${lately}" title="이전블록" class="page-link text-secondary">◀</a></li>
 		  </c:if>
 		  <c:forEach var="i" begin="${(curBlock*blockSize)+1}" end="${(curBlock*blockSize)+blockSize}">
 		    <c:if test="${i == pag && i <= totPage}">
-		      <li class="page-item active"><a href='boList.bo?pag=${i}&pageSize=${pageSize}' class="page-link text-light bg-secondary border-secondary">${i}</a></li>
+		      <li class="page-item active"><a href='boList.bo?pag=${i}&pageSize=${pageSize}&lately=${lately}' class="page-link text-light bg-secondary border-secondary">${i}</a></li>
 		    </c:if>
 		    <c:if test="${i != pag && i <= totPage}">
-		      <li class="page-item"><a href='boList.bo?pag=${i}&pageSize=${pageSize}' class="page-link text-secondary">${i}</a></li>
+		      <li class="page-item"><a href='boList.bo?pag=${i}&pageSize=${pageSize}&lately=${lately}' class="page-link text-secondary">${i}</a></li>
 		    </c:if>
 		  </c:forEach>
 		  <c:if test="${curBlock < lastBlock}">
-		    <li class="page-item"><a href="boList.bo?pag=${(curBlock+1)*blockSize + 1}&pageSize=${pageSize}" title="다음블록" class="page-link text-secondary">▶</a>
+		    <li class="page-item"><a href="boList.bo?pag=${(curBlock+1)*blockSize + 1}&pageSize=${pageSize}&lately=${lately}" title="다음블록" class="page-link text-secondary">▶</a>
 		  </c:if>
 		  <c:if test="${pag != totPage}">
-		    <li class="page-item"><a href="boList.bo?pag=${totPage}&pageSize=${pageSize}" title="마지막페이지" class="page-link" style="color:#555">▷▷</a>
+		    <li class="page-item"><a href="boList.bo?pag=${totPage}&pageSize=${pageSize}&lately=${lately}" title="마지막페이지" class="page-link" style="color:#555">▷▷</a>
 		  </c:if>
 		</c:if>
 	</ul>
