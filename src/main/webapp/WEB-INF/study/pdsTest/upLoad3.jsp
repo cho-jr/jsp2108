@@ -11,6 +11,7 @@
     function fCheck() {
     	var fName = myform.fName1.value;
     	//var ext = fName.substring(fName.lastIndexOf(".")+1);	// 파일 확장자 발췌
+    	//var uExt = ext.toUpperCase();
     	var maxSize = 1024 * 1024 * 20;	// 업로드할 파일의 최대 용량은 20MByte로 한다.
     	
     	if(fName.trim() == "") {
@@ -28,7 +29,7 @@
         fileSize += document.getElementById("fName1").files[i].size;
         
 	    	if(uExt != "ZIP" && uExt != "JPG" && uExt != "GIF" && uExt != "PNG" && uExt != "HWP" && uExt != "PPT" && uExt != "PPTX") {
-	    		alert("업로드 가능한 파일은 'ZIP/JPG/GIF/PNG/HWP/PPT/PPTX");
+	    		alert("업로드 가능한 파일은 'ZIP/JPG/GIF/PNG/HWP/PPT/PPTX'");
 	    		return false;
 	    	}
 	    	else if(fName.indexOf(" ") != -1) {
