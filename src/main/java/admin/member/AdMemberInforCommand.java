@@ -1,4 +1,4 @@
-package admin;
+package admin.member;
 
 import java.io.IOException;
 
@@ -6,9 +6,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import admin.AdminInterface;
 import member.MemberDAO;
+import member.MemberVO;
 
-public class AdMemberResetrCommand implements AdminInterface {
+public class AdMemberInforCommand implements AdminInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -16,11 +18,9 @@ public class AdMemberResetrCommand implements AdminInterface {
 		
 		MemberDAO dao = new MemberDAO();
 		
-		dao.setMemberReset(idx);
+		MemberVO vo = dao.getMemberInfor(idx);
 		
-		request.setAttribute("msg", "memberResetOk");
-		request.setAttribute("url", request.getContextPath()+"/adMemberList.ad");
-
+		request.setAttribute("vo", vo);
 	}
 
 }
