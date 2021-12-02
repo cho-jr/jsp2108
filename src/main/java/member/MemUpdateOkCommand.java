@@ -46,17 +46,6 @@ public class MemUpdateOkCommand implements MemberInterface {
 		hobby = hobby.substring(0, hobby.lastIndexOf("/"));
 		String content = multipartRequest.getParameter("content")==null ? "": multipartRequest.getParameter("content");
 		
-	  // 회원사진이 업로드 되었을때 처리
-//		String photo = multipartRequest.getParameter("photo");
-//		String filesystemName = "";
-//		if(!photo.equals("noimage")) {
-//			filesystemName = multipartRequest.getFilesystemName("fName");			// 실제 서버에 저장되는 파일명
-//		}
-//		else {
-//			filesystemName = "noimage.jpg";
-//		}
-		
-		
 		MemberDAO dao = new MemberDAO();
 		
 		// 비밀번호 암호화 처리
@@ -93,6 +82,7 @@ public class MemUpdateOkCommand implements MemberInterface {
 		vo.setJob(job);
 		vo.setHobby(hobby);
 		
+  	// 회원사진이 업로드(갱신)처리 되었을때 처리
 		String fName = multipartRequest.getFilesystemName("fName");
 		String photo = multipartRequest.getParameter("photo");
 		if(fName != null) {
@@ -104,7 +94,6 @@ public class MemUpdateOkCommand implements MemberInterface {
 		else {
 			vo.setPhoto(photo);
 		}
-		//vo.setPhoto(filesystemName);  // 이미지 처리.....
 		
 		vo.setContent(content);
 		vo.setUserInfor(userInfor);
