@@ -44,7 +44,7 @@
       <tr>
         <td colspan="2" class="text-center">
           <input type="button" value="답장쓰기" onclick="location.href='${ctp}/wmMessage.wm?mSw=0&receiveId=${vo.sendId}';" class="btn btn-secondary"/> &nbsp;
-          <input type="button" value="휴지통으로" onclick="" class="btn btn-secondary"/> &nbsp;
+          <input type="button" value="휴지통으로" onclick="location.href='${ctp}/wmDeleteCheck.wm?mSw=${mSw}&idx=${vo.idx}';" class="btn btn-secondary"/> &nbsp;
           
           <input type="button" value="돌아가기" onclick="history.back();" class="btn btn-secondary"/> &nbsp;
         </td>

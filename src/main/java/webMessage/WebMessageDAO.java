@@ -113,5 +113,23 @@ public class WebMessageDAO {
 		}
 		return vo;
 	}
+
+	// 휴지통으로 이동하기
+	// 받은메세지를 휴지통으로 이동시킬때는 receiveSw를 'g'로 변경처리
+	public int wmDeleteCheck(int idx) {
+		int res = 0;
+		try {
+			sql = "update webMessage set receiveSw = 'g' where idx = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			pstmt.executeUpdate();
+			res = 1;
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : " + e.getMessage());
+		} finally {
+			getConn.pstmtClose();
+		}
+		return res;
+	}
 	
 }

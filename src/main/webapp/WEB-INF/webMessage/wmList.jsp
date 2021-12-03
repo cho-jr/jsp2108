@@ -24,7 +24,10 @@
       <tr>
         <td>${mCount}</td>
         <td>${vo.sendId}</td>
-        <td><a href="${ctp}/wmMessage.wm?mSw=6&idx=${vo.idx}">${vo.title}</a></td>
+        <td>
+          <a href="${ctp}/wmMessage.wm?mSw=6&idx=${vo.idx}">${vo.title}</a>
+          <c:if test="${vo.receiveSw=='n'}"><img src="${ctp}/images/new.gif"/></c:if>
+        </td>
         <td>${fn:substring(vo.receiveDate,0,10)}</td>
       </tr>
       <c:set var="mCount" value="${mCount - 1}"/>
